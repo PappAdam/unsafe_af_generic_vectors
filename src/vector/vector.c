@@ -44,13 +44,14 @@ uint8_t create_vector_with_capacity(Vector *vector, size_t type_size, size_t siz
 
 uint8_t expand_vec(Vector *vec)
 {
-    uint8_t result = 0;
-    size_t new_size = vec->instance_size * vec->capacity << 1;
-    if (!realloc(vec->content, new_size))
+    uint8_t result = 1;
+    size_t new_size = vec->capacity * 2;
+    vec->content = realloc(vec->content, vec->instance_size * new_size);
+    if (!vec->content)
     {
-        void *new_content = (void *)malloc(new_size);
+        void *new_content = (void *)malloc(vec->instance_size * new_size);
 
-        if (!new_content)
+        if (new_content)
         {
             for (size_t i = 0; i < vec->len && i < new_size; i++)
             {
@@ -58,9 +59,13 @@ uint8_t expand_vec(Vector *vec)
             }
             vec->content = (void *)new_content;
         }
-
-        result = 1;
+        else
+        {
+            result = 0;
+        }
     }
+
+    vec->capacity = new_size;
     return result;
 }
 
