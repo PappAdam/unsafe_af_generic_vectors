@@ -4,16 +4,16 @@
 int main(int argc, char const *argv[])
 {
     Vector vec;
-    if (!create_vector_with_capacity(&vec, sizeof(uint8_t), 128))
+    if (!create_vector_with_capacity(&vec, sizeof(Building), 128))
     {
         return -1;
     }
 
     int i;
-    for (i = 0; i < 0x1; i++)
+    for (i = 0; i < 0xFF; i++)
     {
-        push(&vec, (generic)&i);
-        printf("At push:\n\tcapacity: %lu\n\tlen: %lu\n\tindex: %d\n\tvalue: %hhu\n", vec.capacity, vec.len, i, ((uint8_t *)vec.content)[i]);
+        Building new_tile = {.building_type = 12, .flags = 0};
+        push(&vec, (generic)&new_tile);
     }
 
     destroy_vector(&vec);
